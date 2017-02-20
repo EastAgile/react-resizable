@@ -1,5 +1,6 @@
 // @flow
 import {default as React, PropTypes} from 'react';
+import themeable from 'react-themeable';
 import {DraggableCore} from 'react-draggable';
 import cloneElement from './cloneElement';
 
@@ -15,11 +16,16 @@ export type Props = {
   onResizeStop?: ?(e: SyntheticEvent, data: ResizeCallbackData) => any,
   onResizeStart?: ?(e: SyntheticEvent, data: ResizeCallbackData) => any,
   onResize?: ?(e: SyntheticEvent, data: ResizeCallbackData) => any,
-  draggableOpts?: ?Object
+  draggableOpts?: ?Object,
+  theme?: Theme
 };
 type Axis = 'both' | 'x' | 'y' | 'none';
 type Position = {
 
+};
+type Theme = {
+  wrapper: ?any,
+  handle: ?any
 };
 type State = {
   resizing: boolean,
@@ -78,7 +84,9 @@ export default class Resizable extends React.Component {
     onResize: PropTypes.func,
 
     // These will be passed wholesale to react-draggable's DraggableCore
-    draggableOpts: PropTypes.object
+    draggableOpts: PropTypes.object,
+
+    theme: PropTypes.object
   };
   props: Props;
 
@@ -200,15 +208,19 @@ export default class Resizable extends React.Component {
     };
   }
 
+  prepareTheme() {
+    let { theme } = this.props;
+    theme = Object.assign({}, { wrapper: 'react-resizable', handle: 'react-resizable-handle' }, theme);
+    return themeable(theme);
+  }
+
   render(): React.Element<any> {
     // eslint-disable-next-line no-unused-vars
     const {children, draggableOpts, width, height, handleSize,
         lockAspectRatio, axis, minConstraints, maxConstraints, onResize,
-        onResizeStop, onResizeStart, ...p} = this.props;
+        onResizeStop, onResizeStart, theme, ...p} = this.props;
 
-    const className = p.className ?
-      `${p.className} react-resizable`:
-      'react-resizable';
+    const _theme = this.prepareTheme();
 
     // What we're doing here is getting the child of this element, and cloning it with this element's props.
     // We are then defining its children as:
@@ -216,7 +228,7 @@ export default class Resizable extends React.Component {
     // A draggable handle.
     return cloneElement(children, {
       ...p,
-      className,
+      ..._theme(1, 'wrapper'),
       children: [
         children.props.children,
         <DraggableCore
@@ -226,7 +238,7 @@ export default class Resizable extends React.Component {
           onStart={this.resizeHandler('onResizeStart')}
           onDrag={this.resizeHandler('onResize')}
           >
-          <span className="react-resizable-handle" />
+          <span { ..._theme(2, 'handle') } />
         </DraggableCore>
       ]
     });

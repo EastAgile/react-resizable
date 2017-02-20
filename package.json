@@ -1,6 +1,6 @@
 {
   "name": "react-resizable",
-  "version": "1.6.0",
+  "version": "1.6.0git",
   "description": "A component that is resizable with handles.",
   "main": "index.js",
   "scripts": {
@@ -53,7 +53,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "react-draggable": "^2.1.0"
+    "react-draggable": "^2.1.0",
+    "react-themeable": "^1.1.0"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0",

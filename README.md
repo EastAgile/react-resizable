@@ -9,8 +9,19 @@ You can either use the `<Resizable>` element directly, or use the much simpler `
 See the example and associated code in [TestLayout](/test/TestLayout.jsx) and
 [ResizableBox](/lib/ResizableBox.jsx) for more details.
 
-Make sure you use the associated styles in [/css/styles.css](/css/styles.css), as without them, you will have
-problems with handle placement and visibility.
+You can pass in theme object as supported by [React Themeable](https://github.com/markdalgleish/react-themeable)
+to overwrite style for both `<Resizable>` and `<ResizableBox>` element:
+
+```js
+const theme = {
+  wrapper: 'MyResizable__wrapper',   // if this is not defined, default to class "react-resizable"
+  handle: 'MyResizable__handle'      // if this is not defined, default to class "react-resizable-handle"
+};
+...
+<ResizableBox theme={ theme }/>
+```
+
+You can use default style found within [/css/styles.css](/css/styles.css) if you would like to not overwrite style.
 
 You can pass options directly to the underlying `DraggableCore` instance by using the prop `draggableOpts`.
 See the [demo](/test/TestLayout.jsx) for more on this.
